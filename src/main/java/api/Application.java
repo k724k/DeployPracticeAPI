@@ -1,13 +1,13 @@
-package com.example.deploypracticeapi;
+package api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DeployPracticeApiApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(DeployPracticeApiApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }
