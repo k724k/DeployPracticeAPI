@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 @ParameterObject
 @Getter
@@ -27,7 +28,11 @@ public class Pagenation {
     public void setPage(Integer page) {
         this.page = page;
     }
+
     public PageRequest generatePageable() {
-        return PageRequest.of(this.page-1, this.size);
+        int safePage = (this.page == null || this.page < 1) ? 0 : this.page - 1;
+        int safeSize = (this.size == null || this.size < 1) ? 10 : this.size; // 기본 크기 10
+
+        return PageRequest.of(safePage, safeSize, Sort.by(Sort.Direction.DESC, "boardID"));
     }
 }
