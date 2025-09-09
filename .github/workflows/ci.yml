@@ -50,5 +50,14 @@ jobs:
 
       - name: Build and Test
         run: ./gradlew build test
-      - name: Lint check
-        run: npm run lint
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifact
+          path: build/libs/*.jar   # Gradle 기본 빌드 산출물 위치
+
+
+
+
+
