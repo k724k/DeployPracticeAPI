@@ -50,3 +50,5 @@ jobs:
 
       - name: Build and Test
         run: ./gradlew build test
+      - name: Lint check
+        run: npm run lint
