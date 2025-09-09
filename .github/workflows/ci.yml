@@ -4,7 +4,20 @@ on:
     branches:
       - main
 jobs:
-  echo:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'Hello, GitHub Actions!'
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew   # gradlew 실행권한 부여
+
+      - name: Build and Test
+        run: ./gradlew build test
