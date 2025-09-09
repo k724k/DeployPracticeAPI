@@ -1,6 +1,6 @@
-package api.board;
+package com.example.deploypracticeapi.board;
 
-import api.jpa.BoardEntity;
+import com.example.deploypracticeapi.jpa.BoardEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

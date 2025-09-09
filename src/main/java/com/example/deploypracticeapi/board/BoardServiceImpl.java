@@ -1,7 +1,7 @@
-package api.board;
+package com.example.deploypracticeapi.board;
 
-import api.jpa.BoardEntity;
-import api.model.Pagenation;
+import com.example.deploypracticeapi.jpa.BoardEntity;
+import com.example.deploypracticeapi.model.Pagenation;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

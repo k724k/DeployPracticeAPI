@@ -1,8 +1,8 @@
-package api.board;
+package com.example.deploypracticeapi.board;
 
-import api.model.Pagenation;
-import api.model.ResponseDto;
-import api.utils.ResponseUtil;
+import com.example.deploypracticeapi.model.Pagenation;
+import com.example.deploypracticeapi.model.ResponseDto;
+import com.example.deploypracticeapi.utils.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;

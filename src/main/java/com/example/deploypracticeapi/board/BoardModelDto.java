@@ -1,4 +1,4 @@
-package api.board;
+package com.example.deploypracticeapi.board;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

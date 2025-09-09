@@ -1,6 +1,6 @@
-package api.board;
+package com.example.deploypracticeapi.board;
 
-import api.model.Pagenation;
+import com.example.deploypracticeapi.model.Pagenation;
 
 import java.util.List;
 

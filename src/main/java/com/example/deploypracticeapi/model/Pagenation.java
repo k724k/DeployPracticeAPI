@@ -1,4 +1,4 @@
-package api.model;
+package com.example.deploypracticeapi.model;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.Min;

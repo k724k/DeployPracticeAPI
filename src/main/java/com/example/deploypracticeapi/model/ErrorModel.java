@@ -1,4 +1,4 @@
-package api.model;
+package com.example.deploypracticeapi.model;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

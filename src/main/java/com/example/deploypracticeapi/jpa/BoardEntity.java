@@ -1,6 +1,6 @@
-package api.jpa;
+package com.example.deploypracticeapi.jpa;
 
-import api.board.BoardModelDto;
+import com.example.deploypracticeapi.board.BoardModelDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;

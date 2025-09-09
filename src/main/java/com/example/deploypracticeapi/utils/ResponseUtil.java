@@ -1,7 +1,7 @@
-package api.utils;
+package com.example.deploypracticeapi.utils;
 
-import api.model.ErrorModel;
-import api.model.ResponseDto;
+import com.example.deploypracticeapi.model.ErrorModel;
+import com.example.deploypracticeapi.model.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
