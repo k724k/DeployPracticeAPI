@@ -1,4 +1,4 @@
-name: Our First Workflow
+name: CI/CD Pipeline
 
 on:
   push:
@@ -24,18 +24,19 @@ jobs:
           --health-retries=5
 
     steps:
+      # 1. 코드 Checkout
       - name: Checkout code
         uses: actions/checkout@v4
-
+      # 2. JDK 설치
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-
+      # 3. Gradle 실행 권한 부여
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
-
+      # 4. MySQL 준비 대기
       - name: Wait for MySQL to be ready
         run: |
           echo "Waiting for MySQL to be ready..."
@@ -47,10 +48,10 @@ jobs:
             echo "Waiting ($i)..."
             sleep 2
           done
-
+      # 5. Build & Test
       - name: Build and Test
         run: ./gradlew build test
-
+      # 6. 빌드 산출물 업로드
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
