@@ -25,7 +25,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # 4. Build & Test (운영 DB 그대로 사용)
+      # 4. Build & Test (RDS 운영 DB 그대로 사용)
       - name: Build and Test
         run: ./gradlew build test
 
@@ -63,3 +63,19 @@ jobs:
       - name: Push Docker image to ECR
         run: |
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
+      - name: Get Public IP
+        id: publicip
+        run: |
+          response=$(curl -s https://api.ipify.org)
+          echo "ip=$response" >> $GITHUB_OUTPUT
+
+      - name: Add GitHub Actions IP to Security Group
+        run: |
+          aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 3306 --cidr ${{ steps.publicip.outputs.ip }}/32 || echo "IP already exists"
+
+      - name: Run Tests
+        run: ./gradlew build test
+
+      - name: Remove GitHub Actions IP from Security Group
+        run: |
+          aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 3306 --cidr ${{ steps.publicip.outputs.ip }}/32 || echo "IP was not in security group"
