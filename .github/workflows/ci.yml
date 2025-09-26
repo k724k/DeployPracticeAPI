@@ -9,20 +9,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8
-        ports:
-          - 3306:3306
-        env:
-          MYSQL_DATABASE: DeployPracticeAPI
-          MYSQL_ROOT_PASSWORD: 0903
-        options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -p0903"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
       # 1. 코드 체크아웃
       - name: Checkout code
@@ -39,31 +25,18 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # 4. MySQL 준비 대기
-      - name: Wait for MySQL to be ready
-        run: |
-          echo "Waiting for MySQL to be ready..."
-          for i in {1..30}; do
-            if mysqladmin ping -h127.0.0.1 -uroot -p0903 --silent; then
-              echo "MySQL is ready!"
-              break
-            fi
-            echo "Waiting ($i)..."
-            sleep 2
-          done
-
-      # 5. Build & Test
+      # 4. Build & Test (RDS 직접 연결)
       - name: Build and Test
-        run: ./gradlew build test
+        run: ./gradlew build test -Dspring.profiles.active=test
 
-      # 6. 빌드 산출물 업로드
+      # 5. 빌드 산출물 업로드
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
           path: build/libs/*.jar
 
-      # 7. AWS 인증 설정
+      # 6. AWS 인증 설정
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -71,24 +44,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 8. ECR 로그인
+      # 7. ECR 로그인
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 9. Docker 이미지 빌드
+      # 8. Docker 이미지 빌드
       - name: Build Docker image
         run: |
           docker build -t ${{ secrets.ECR_REPOSITORY }}:latest .
 
-      # 10. ECR용 태그 붙이기
+      # 9. ECR용 태그 붙이기
       - name: Tag Docker image for ECR
         run: |
           docker tag ${{ secrets.ECR_REPOSITORY }}:latest ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
 
-      # 11. Docker push to ECR
+      # 10. Docker push to ECR
       - name: Push Docker image to ECR
         run: |
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}:latest
-
-
