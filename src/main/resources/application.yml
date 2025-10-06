@@ -22,24 +22,31 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
 
-# Swagger ? Api-Docs ??
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_S3_ACCESS_KEY_ID}
+        secret-key: ${AWS_S3_SECRET_ACCESS_KEY}
+      s3:
+        bucket: deploypractice-static-files
+      region:
+        static: ap-northeast-2
+
 springdoc:
   swagger-ui:
-    enabled: true # swagger ui ???? (?? ???? ??? default? true)
+    enabled: true
     display-request-duration: true
-    persistAuthorization: true # ?? ??? ?? (???? ??? ?????? ?? ??)
+    persistAuthorization: true
     tags-sorter: alpha
-    deep-linking: true # API ?? ???? ??? URL ? ?? ?? ?? ( true / false )
-  #    supported-submit-methods: # API ???? ??? ?? ?? ( ??? ???? ???? ?? ???? ?? ) ( get / post / patch / put / delete / options / head ? )
-  #      - get
-  #    try-it-out-enabled: false # ??? ?? ?? ??? ?? ( true / false )
+    deep-linking: true
   api-docs:
     groups:
       enabled: true
     enabled: true
-  version: 'v1' # API ?? ??
-  default-consumes-media-type: application/json # ?? consume media type
-  default-produces-media-type: application/json # ?? produce media type
-  model-and-view-allowed: true # ModelAndView ??
+  version: 'v1'
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  model-and-view-allowed: true
