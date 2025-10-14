@@ -37,12 +37,16 @@ jobs:
             cd /home/ubuntu/DeployPracticeAPI
             
             # Git에서 최신 코드 가져오기
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
             
-            # 필요 시 AWS 환경 변수 설정 (S3 등 접근 시)
+            # AWS 환경 변수 설정 (S3 등 접근 시)
             export AWS_S3_ACCESS_KEY_ID=${{ secrets.AWS_S3_ACCESS_KEY_ID }}
             export AWS_S3_SECRET_ACCESS_KEY=${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
             export AWS_REGION=${{ secrets.AWS_REGION }}
+            
+            # 이전 JAR 삭제 (선택사항)
+            rm -f build/libs/*SNAPSHOT.jar
             
             # Gradle 빌드 (테스트 제외)
             ./gradlew clean build -x test
@@ -50,5 +54,6 @@ jobs:
             # 이전 프로세스 종료
             sudo fuser -k -n tcp 8080 || true
             
-            # JAR 실행 (백그라운드)
-            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &
+            # 최신 JAR 선택 후 실행 (백그라운드, 환경 변수 유지)
+            JAR_FILE=$(ls -t build/libs/*SNAPSHOT.jar | head -1)
+            sudo -E nohup java -jar "$JAR_FILE" > ./output.log 2>&1 &
