@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/check")
+@RequestMapping("/health")
 public class ExampleController {
 
     @GetMapping("/")
@@ -14,7 +14,7 @@ public class ExampleController {
         return "Hello World!?";
     }
 
-    @GetMapping("/health")
+    @GetMapping("/check")
     public ResponseEntity<String> healthCheck() {
         return ResponseEntity.ok("Success Health Check");
     }
