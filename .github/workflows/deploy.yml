@@ -1,15 +1,15 @@
-name: CI/CD
+name: CI/CD to EC2
 
 on:
   push:
     branches:
       - main
 
-jobs: # 여러 step 들로 구성, 병렬적으로 수행
+jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest # ubuntu 환경 / 가장 최신 버전(latest)
+    runs-on: ubuntu-latest
 
-    steps: # 특정 작업을 수행하는 가장 작은 단위
+    steps:
       # 1. 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,56 +21,29 @@ jobs: # 여러 step 들로 구성, 병렬적으로 수행
           java-version: '17'
           distribution: 'temurin'
 
-      # 3. Gradle 실행 권한 부여
+      # 3. gradlew 실행 권한 부여
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # 4. Build & Test (환경변수 주입)
-      - name: Build and Test
+      # 4. 빌드 (환경변수 포함)
+      - name: Build with Gradle
         env:
           AWS_S3_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
           AWS_S3_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: ./gradlew build test
+        run: ./gradlew clean build
 
-      # 5. 빌드 산출물 업로드
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+      # 5. EC2에 접속 후 배포
+      - name: SSH(원격접속) 로 EC2 접속
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          name: build-artifact
-          path: build/libs/*.jar
-
-      # 6. AWS 인증 설정 (ECR 로그인용)
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      # 7. ECR 로그인
-      - name: Log in to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      # 8. Docker 이미지 빌드
-      - name: Build Docker image
-        run: docker build -t my-app:latest .
-
-      # 9. Docker 이미지 태그
-      - name: Tag Docker image for ECR
-        run: docker tag my-app:latest ${{ steps.login-ecr.outputs.registry }}/my-app:latest
-
-      # 10. Docker 이미지 푸시
-      - name: Push Docker image to ECR
-        run: docker push ${{ steps.login-ecr.outputs.registry }}/my-app:latest
-
-      # 11. 컨테이너 실행 시 환경변수 주입
-      - name: Run Docker container
-        run: |
-          docker run -d \
-            -e AWS_S3_ACCESS_KEY_ID=${{ secrets.AWS_S3_ACCESS_KEY_ID }} \
-            -e AWS_S3_SECRET_ACCESS_KEY=${{ secrets.AWS_S3_SECRET_ACCESS_KEY }} \
-            -e AWS_REGION=${{ secrets.AWS_REGION }} \
-            -p 80:8080 \
-            ${{ steps.login-ecr.outputs.registry }}/my-app:latest
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            cd /home/ubuntu/DeployPracticeAPI
+            git pull origin main
+            ./gradlew clean build
+            sudo fuser -k -n tcp 8080 || true  
+            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 & 
