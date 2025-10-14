@@ -1,15 +1,15 @@
-name: CI/CD Pipeline
+name: CI/CD
 
 on:
   push:
     branches:
       - main
 
-jobs:
+jobs: # 여러 step 들로 구성, 병렬적으로 수행
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # ubuntu 환경 / 가장 최신 버전(latest)
 
-    steps:
+    steps: # 특정 작업을 수행하는 가장 작은 단위
       # 1. 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v4
