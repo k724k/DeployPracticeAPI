@@ -25,7 +25,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      # 5. EC2에 접속 후 배포
+      # 4. EC2에 접속 후 배포
       - name: SSH(원격접속) 로 EC2 접속
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -36,7 +36,7 @@ jobs:
           script: |
             cd /home/ubuntu/DeployPracticeAPI
             
-            # Git에서 최신 코드 가져오기
+            # Git에서 최신 코드 가져오기 (로컬 변경 사항 무시)
             git fetch origin
             git reset --hard origin/main
             
@@ -51,9 +51,10 @@ jobs:
             # Gradle 빌드 (테스트 제외)
             ./gradlew clean build -x test
             
-            # 이전 프로세스 종료
-            sudo fuser -k -n tcp 8080 || true
+            # 이전 프로세스 종료 (실제 실행 포트 확인 후 종료)
+            sudo fuser -k -n tcp 80 || true
             
             # 최신 JAR 선택 후 실행 (백그라운드, 환경 변수 유지)
             JAR_FILE=$(ls -t build/libs/*SNAPSHOT.jar | head -1)
+            echo "Starting JAR: $JAR_FILE"
             sudo -E nohup java -jar "$JAR_FILE" > ./output.log 2>&1 &
