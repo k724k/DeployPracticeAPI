@@ -52,22 +52,22 @@ jobs:
           source: .env
           target: /home/ubuntu/DeployPracticeAPI/tobe
 
-  - name: SSH로 EC2에 접속하여 배포하기
-    uses: appleboy/ssh-action@v1.0.3
-    with:
-      host: ${{ secrets.EC2_HOST }}
-      username: ${{ secrets.EC2_USERNAME }}
-      key: ${{ secrets.EC2_PRIVATE_KEY }}
-      script_stop: true
-      script: |
-        rm -rf /home/ubuntu/DeployPracticeAPI/current
-        mkdir /home/ubuntu/DeployPracticeAPI/current
-        mv /home/ubuntu/DeployPracticeAPI/tobe/project.jar /home/ubuntu/DeployPracticeAPI/current/project.jar
-        mv /home/ubuntu/DeployPracticeAPI/tobe/.env /home/ubuntu/DeployPracticeAPI/current/.env
-        cd /home/ubuntu/DeployPracticeAPI/current
-        source .env
-        sudo fuser -k -n tcp 8080 || true
-        nohup java -jar project.jar --server.port=8080 > output.log 2>&1 &
-        rm -rf /home/ubuntu/DeployPracticeAPI/tobe
+      - name: SSH로 EC2에 접속하여 배포하기
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            rm -rf /home/ubuntu/DeployPracticeAPI/current
+            mkdir /home/ubuntu/DeployPracticeAPI/current
+            mv /home/ubuntu/DeployPracticeAPI/tobe/project.jar /home/ubuntu/DeployPracticeAPI/current/project.jar
+            mv /home/ubuntu/DeployPracticeAPI/tobe/.env /home/ubuntu/DeployPracticeAPI/current/.env
+            cd /home/ubuntu/DeployPracticeAPI/current
+            source .env
+            sudo fuser -k -n tcp 8080 || true
+            nohup java -jar project.jar --server.port=8080 > output.log 2>&1 &
+            rm -rf /home/ubuntu/DeployPracticeAPI/tobe
             
 
