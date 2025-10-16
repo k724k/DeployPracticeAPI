@@ -1,7 +1,8 @@
 #!/bin/bash
 
 echo "--------------- 서버 배포 시작 -----------------"
-cd /home/ubuntu/DeployPracticeAPI
-sudo fuser -k -n tcp 8080 || true
-nohup java -jar project.jar > ./output.log 2>&1 &
+docker stop deploypractice-server || true
+docker rm deploypractice-server || true
+docker pull 827859361304.dkr.ecr.ap-northeast-2.amazonaws.com/deploypractice-server:latest
+docker run -d --name deploypractice-server -p 8080:8080 827859361304.dkr.ecr.ap-northeast-2.amazonaws.com/deploypractice-server:latest
 echo "--------------- 서버 배포 끝 -----------------"
