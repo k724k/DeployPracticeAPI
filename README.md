@@ -1,4 +1,5 @@
 # 🏷️ DeployPracticeAPI 
+Spring Boot CRUD 백엔드를 GitHub Actions, Docker, AWS(Route53, ELB, RDS, S3) 기반으로 CI/CD 자동 배포 파이프라인까지 구축한 실습 프로젝트입니다.
 
 ## ✅ Overview
 - 기본 CRUD 생성 및 데이터베이스 연결  
