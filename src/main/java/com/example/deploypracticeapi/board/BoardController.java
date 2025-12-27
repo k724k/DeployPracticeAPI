@@ -24,7 +24,7 @@ public class BoardController {
 
     @Operation(summary = "게시판 목록 조회")
     @GetMapping("/list")
-    public ResponseDto.ListResponseModel<BoardModelDto.BoardModel> getMemoList(
+    public ResponseDto.ListResponseModel<BoardModelDto.BoardModel> getBoardList(
             @ParameterObject Pagenation pagenation
     ) {
         return responseUtil.getListResponse(boardService.getBoardList(pagenation));
@@ -32,7 +32,7 @@ public class BoardController {
 
     @Operation(summary = "게시판 상세 조회")
     @GetMapping("/{boardID}")
-    public ResponseDto.ResponseModel<BoardModelDto.BoardModel> getMemoDetail(
+    public ResponseDto.ResponseModel<BoardModelDto.BoardModel> getBoardDetail(
             @PathVariable("boardID") Long boardID
     ) {
         return responseUtil.getResponse(boardService.getBoardDetail(boardID));
@@ -40,7 +40,7 @@ public class BoardController {
 
     @Operation(summary = "게시판 등록")
     @PostMapping("")
-    public ResponseDto.ResponseModel<String> insertMemo(
+    public ResponseDto.ResponseModel<String> insertBoard(
             @Valid @RequestBody BoardModelDto.UpdateBoardModel updateBoardModel
     ) {
         return responseUtil.getResponse(boardService.insertBoard(updateBoardModel));
@@ -48,7 +48,7 @@ public class BoardController {
 
     @Operation(summary = "게시판 수정")
     @PatchMapping("{boardID}")
-    public ResponseDto.ResponseModel<String> editMemo(
+    public ResponseDto.ResponseModel<String> editBoard(
             @PathVariable("boardID") Long boardID,
             @RequestBody @Validated BoardModelDto.UpdateBoardModel updateBoardModel
 
@@ -59,7 +59,7 @@ public class BoardController {
 
     @Operation(summary = "게시판 삭제")
     @DeleteMapping("{boardID}")
-    public ResponseDto.ResponseModel<String> deleteMemo(
+    public ResponseDto.ResponseModel<String> deleteBoard(
             @PathVariable("boardID") Long boardID
     ) {
 

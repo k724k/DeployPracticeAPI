@@ -1,6 +1,5 @@
 package com.example.deploypracticeapi.board;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotBlank;
@@ -9,18 +8,6 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 public class BoardModelDto {
-
-    public static class SearchBoardListModel {
-
-        @Parameter(description = "boardID")
-        private Long boardID;
-
-        @Schema(description = "게시판 이름")
-        private String boardName;
-
-        @Schema(description = "게시판 제목")
-        private String title;
-    }
 
     @Getter
     public static class UpdateBoardModel {
