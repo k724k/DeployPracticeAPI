@@ -30,13 +30,13 @@ public class MemoServiceImpl implements MemoService {
     public List<MemoModelDto.MemoModel> getMemoList(Pagenation pagenation) {
         Pageable pageable = pagenation.generatePageable();
 
-        Page<MemoEntity> memoEntityPage = memoRepository.findAll(pageable);  // findAll 사용
+        Page<MemoEntity> memoEntityPage = memoRepository.findAll(pageable);
         List<MemoEntity> memoEntities = memoEntityPage.getContent();
 
         List<MemoModelDto.MemoModel> memoListModelList = new ArrayList<>();
-        for (MemoEntity memo : memoEntities) {  // memo 사용
-            MemoModelDto.MemoModel memoListModel = new MemoModelDto.MemoModel();  // MemoModel 사용
-            memoListModel.setMemoID(memo.getMemoID());      // memo.getMemoID()
+        for (MemoEntity memo : memoEntities) {
+            MemoModelDto.MemoModel memoListModel = new MemoModelDto.MemoModel();
+            memoListModel.setMemoID(memo.getMemoID());
             memoListModel.setTitle(memo.getTitle());
             memoListModel.setContent(memo.getContent());
             memoListModel.setSubDescr1(memo.getSubDescr1());

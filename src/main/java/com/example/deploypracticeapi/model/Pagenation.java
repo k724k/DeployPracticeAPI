@@ -1,8 +1,8 @@
 package com.example.deploypracticeapi.model;
 
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import org.springdoc.core.annotations.ParameterObject;
@@ -11,28 +11,35 @@ import org.springframework.data.domain.Sort;
 
 @ParameterObject
 @Getter
+@Setter
 @ToString
 public class Pagenation {
     @Min(1)
-    @Parameter(description = "페이지에 노출되는 목록 개수")
     private Integer size;
     @Min(1)
-    @Parameter(description = "현재 페이지 (웹용)")
     private Integer page;
+
+    private String sortField;
+    private String sortDirection = "DESC";
 
     public Pagenation(Integer size, Integer page) {
         this.page = (page != null) ? page : 1;
-        this.size = (size != null) ? size : 0;
-    }
-
-    public void setPage(Integer page) {
-        this.page = page;
+        this.size = (size != null) ? size : 10;
     }
 
     public PageRequest generatePageable() {
         int safePage = (this.page == null || this.page < 1) ? 0 : this.page - 1;
-        int safeSize = (this.size == null || this.size < 1) ? 10 : this.size; // 기본 크기 10
+        int safeSize = (this.size == null || this.size < 1) ? 10 : this.size;
 
-        return PageRequest.of(safePage, safeSize, Sort.by(Sort.Direction.DESC, "boardID"));
+        if (sortField == null || sortField.trim().isEmpty()) {
+            return PageRequest.of(safePage, safeSize);
+        }
+
+        try {
+            return PageRequest.of(safePage, safeSize,
+                    Sort.by(Sort.Direction.fromString(sortDirection), sortField.trim()));
+        } catch (Exception e) {
+            return PageRequest.of(safePage, safeSize);
+        }
     }
 }
