@@ -33,3 +33,14 @@ Spring Boot CRUD 백엔드를 GitHub Actions, Docker, AWS(Route53, ELB, RDS, S3)
   <img src="https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white" />&nbsp
 </div>
 
+## ✅ CI/CD 구축 과정
+
+Step 1. GitHub Actions + EC2 직접 빌드 방식
+- GitHub에 코드 푸시 시 GitHub Actions 워크플로우 실행
+- EC2 서버에 접속하여 Git pull 후 애플리케이션 빌드 및 실행
+- 배포 흐름과 자동화의 기본 구조를 이해하기 위한 1차 단계
+- 
+<!-- Uploading "스크린샷 2026-01-29 오후 8.45.30.png"... -->
+
+
+
