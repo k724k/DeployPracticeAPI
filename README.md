@@ -39,8 +39,8 @@ Step 1. GitHub Actions + EC2 직접 빌드 방식
 - GitHub에 코드 푸시 시 GitHub Actions 워크플로우 실행
 - EC2 서버에 접속하여 Git pull 후 애플리케이션 빌드 및 실행
 - 배포 흐름과 자동화의 기본 구조를 이해하기 위한 1차 단계
-- 
-<!-- Uploading "스크린샷 2026-01-29 오후 8.45.30.png"... -->
+  
+<img width="541" height="159" alt="Image" src="https://github.com/user-attachments/assets/61b35b0d-b94a-4e82-b1ab-b4ac621e14a8" />
 
 
 
