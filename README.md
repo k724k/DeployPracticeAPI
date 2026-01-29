@@ -42,5 +42,23 @@ Step 1. GitHub Actions + EC2 직접 빌드 방식
   
 <img width="541" height="159" alt="Image" src="https://github.com/user-attachments/assets/61b35b0d-b94a-4e82-b1ab-b4ac621e14a8" />
 
+Step 2. GitHub Actions → 빌드 파일 전달 방식
+- GitHub Actions에서 애플리케이션 빌드 수행
+- 빌드 산출물을 EC2 서버로 전달하여 배포 진행
+- 서버에서 직접 빌드하지 않고 빌드 책임을 CI 단계로 분리
 
+<img width="548" height="145" alt="Image" src="https://github.com/user-attachments/assets/c13c71bf-a6f3-4dcc-943e-c3b473498fd2" />
 
+Step 3. S3 + CodeDeploy 기반 배포 구조
+- GitHub Actions에서 빌드 파일 생성 후 S3에 업로드
+- CodeDeploy를 통해 EC2 인스턴스에 배포 명령 전달
+- EC2가 S3에서 빌드 파일을 내려받아 배포 수행
+
+<img width="548" height="304" alt="Image" src="https://github.com/user-attachments/assets/79dd8179-16bb-4aa1-b68d-4c863e955ea4" />
+
+Step 4. Docker + ECR 기반 CI/CD
+- GitHub Actions에서 Docker Image 빌드
+- Docker Image를 AWS ECR에 업로드
+- EC2 서버가 ECR에서 Image를 Pull 받아 컨테이너 실행
+
+<img width="577" height="303" alt="Image" src="https://github.com/user-attachments/assets/6c5cd0f6-ae08-4dab-ba40-56c5986c03e6" />
